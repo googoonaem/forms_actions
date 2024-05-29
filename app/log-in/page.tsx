@@ -1,23 +1,25 @@
 'use client';
 
 import FormButton from '@/components/form-btn';
-import Link from 'next/link';
+import FormInput from '@/components/form-input';
+import { useFormState } from 'react-dom';
+import { logIn } from './actions';
 
 
-const initialState = {
-  token: false,
-  error: undefined,
-};
-
-export default function Home() {
+export default function LogIn() {
+  const [state, dispatch] =
+    useFormState(
+      logIn,
+      null
+    );
   return (
     <div className="flex flex-col min-h-screen justify-center bg-[#d7e0dc]">
       <div className="mx-auto mb-10 -mt-[150px]">
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="180px"
-            height="180px"
+            width="80px"
+            height="80px"
             viewBox="0 0 1024 1024"
             className="icon"
             version="1.1"
@@ -109,9 +111,33 @@ export default function Home() {
           </svg>
         </span>
       </div>
-      <div className='mx-auto flex gap-2'>
-        <Link href="/create-account"><FormButton text="가입하기" /></Link>
-        <Link href="/log-in"><FormButton text="로그인" /></Link>
+      <div>
+        <form
+          action={dispatch}
+          className="flex flex-col gap-4"
+        >
+          <FormInput
+            type="email"
+            readOnly={false}
+            placeholder="Email"
+            required={true}
+            name="email"
+            errors={
+              state?.fieldErrors.email
+            }
+          />
+          <FormInput
+            type="password"
+            placeholder="Password"
+            required={true}
+            readOnly={false}
+            name="password"
+            errors={
+              state?.fieldErrors.password
+            }
+          />
+          <FormButton text="Log in" />
+        </form>
       </div>
     </div>
   );
